@@ -105,6 +105,12 @@ const parseQuestions = () => {
         }
     });
 
+    // Shuffle questions
+    for (let i = questions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
+
     return questions;
 };
 
@@ -121,7 +127,7 @@ const startQuiz = () => {
     viewMode = 'exam';
 
     const answersMap = {};
-    currentQuestions.forEach(q => answersMap[q.id] = q.correctAnswer);
+    currentQuestions.forEach((q, index) => answersMap[index] = q.correctAnswer);
     sessionStorage.setItem('nptel_quiz_answers', JSON.stringify(answersMap));
 
     renderOverlay();
