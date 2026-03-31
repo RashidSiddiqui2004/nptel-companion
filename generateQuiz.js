@@ -9,6 +9,17 @@ let currentQuestionIndex = 0;
 let isGraded = false;
 let viewMode = 'exam'; // 'exam' or 'sheet'
 
+const Messages = {
+    TAKE_MOCK_QUIZ: "Take Mock Quiz",
+    QUIZ_TITLE: "NPTEL Companion Quiz",
+    EXAM_MODE: "Exam Mode",
+    SHEET_MODE: "Sheet Mode",
+    SUBMIT: "Submit",
+    RESULTS_SUMMARY: "Results Summary",
+    CLOSE: "Close and Reset",
+    EXIT: "Exit"
+}
+
 const generateQuiz = () => {
     const assessmentBody = document.querySelector(".gcb-assessment-contents");
     if (!assessmentBody) return;
@@ -38,7 +49,7 @@ const generateQuiz = () => {
 
     const button = document.createElement('button');
     button.id = 'nptel-combined-quiz-btn';
-    button.textContent = "Take Mock Quiz";
+    button.textContent = Messages.TAKE_MOCK_QUIZ;
     button.style.cssText = `
         background-color: #4CAF50;
         color: white;
@@ -68,21 +79,26 @@ const parseQuestions = () => {
 
     questionElements.forEach((qElem, index) => {
         const questionTextElem = qElem.querySelector('.qt-question');
-        const questionText = questionTextElem ? questionTextElem.innerText.trim() : "";
-        
+        const questionHTML = questionTextElem ? questionTextElem.innerHTML : "";
+
         const choices = [];
         qElem.querySelectorAll('.gcb-mcq-choice').forEach(choiceElem => {
             const label = choiceElem.querySelector('label');
-            if (label) choices.push(label.innerText.trim());
+            if (label) {
+                choices.push({
+                    html: label.innerHTML,
+                    text: label.innerText.trim() // Text for comparison
+                });
+            }
         });
 
         const facultyAnswerElem = qElem.querySelector('.faculty-answer label');
         const correctAnswer = facultyAnswerElem ? facultyAnswerElem.innerText.trim() : null;
 
-        if (questionText && choices.length > 0) {
+        if (questionHTML && choices.length > 0) {
             questions.push({
                 id: index,
-                text: questionText,
+                html: questionHTML,
                 choices: choices,
                 correctAnswer: correctAnswer
             });
@@ -129,19 +145,33 @@ const renderOverlay = () => {
         font-family: 'Segoe UI', Roboto, sans-serif;
     `;
 
+    // Global Styles for multimedia in overlay
+    const style = document.createElement('style');
+    style.textContent = `
+        #nptel-quiz-overlay img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: block;
+        }
+        #nptel-quiz-overlay video {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+    `;
+    overlay.appendChild(style);
+
+    // Header
     const header = document.createElement('div');
     header.style.cssText = `
-        height: 65px;
-        background: #1e1e1e;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 30px;
-        border-bottom: 1px solid #333;
+        height: 65px; background: #1e1e1e;
+        display: flex; justify-content: space-between;
+        align-items: center; padding: 0 30px; border-bottom: 1px solid #333;
     `;
 
     const titleDiv = document.createElement('div');
-    titleDiv.innerHTML = `<h2 style="margin:0; color:#4CAF50; font-size:1.2rem;">NPTEL Companion Quiz</h2>`;
+    titleDiv.innerHTML = `<h2 style="margin:0; color:#4CAF50; font-size:1.2rem;">${Messages.QUIZ_TITLE}</h2>`;
     header.appendChild(titleDiv);
 
     const controls = document.createElement('div');
@@ -150,10 +180,10 @@ const renderOverlay = () => {
     // Mode Toggle
     const toggleContainer = document.createElement('div');
     toggleContainer.style.cssText = "display:flex; background:#333; padding:4px; border-radius:6px;";
-    
-    const examBtn = createModeBtn("Exam Mode", 'exam');
-    const sheetBtn = createModeBtn("Sheet Mode", 'sheet');
-    
+
+    const examBtn = createModeBtn(Messages.EXAM_MODE, 'exam');
+    const sheetBtn = createModeBtn(Messages.SHEET_MODE, 'sheet');
+
     toggleContainer.appendChild(examBtn);
     toggleContainer.appendChild(sheetBtn);
     controls.appendChild(toggleContainer);
@@ -184,15 +214,10 @@ const createModeBtn = (text, mode) => {
     btn.textContent = text;
     const isActive = viewMode === mode;
     btn.style.cssText = `
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: 600;
+        padding: 6px 12px; border: none; border-radius: 4px;
+        cursor: pointer; font-size: 12px; font-weight: 600;
         background: ${isActive ? '#4CAF50' : 'transparent'};
-        color: ${isActive ? '#fff' : '#aaa'};
-        transition: all 0.2s;
+        color: ${isActive ? '#fff' : '#aaa'}; transition: all 0.2s;
     `;
     btn.onclick = () => {
         if (viewMode === mode) return;
@@ -217,10 +242,10 @@ const renderContent = () => {
 const renderExamMode = (container) => {
     const sidebar = document.createElement('div');
     sidebar.style.cssText = "width:260px; background:#181818; border-right:1px solid #333; padding:20px; overflow-y:auto;";
-    
+
     const grid = document.createElement('div');
     grid.style.cssText = "display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px;";
-    
+
     const storedAnswers = JSON.parse(sessionStorage.getItem('nptel_quiz_answers'));
 
     currentQuestions.forEach((_, index) => {
@@ -248,34 +273,30 @@ const renderExamMode = (container) => {
 
     const display = document.createElement('div');
     display.style.cssText = "flex:1; padding:40px; overflow-y:auto; display:flex; flex-direction:column; align-items:center;";
-    
-    const card = renderQuestionCard(currentQuestionIndex, true);
-    display.appendChild(card);
+    display.appendChild(renderQuestionCard(currentQuestionIndex, true));
     container.appendChild(display);
 };
 
 const renderSheetMode = (container) => {
     const sheet = document.createElement('div');
     sheet.style.cssText = "flex:1; padding:40px; overflow-y:auto; display:flex; flex-direction:column; align-items:center;";
-    
+
     currentQuestions.forEach((_, index) => {
         sheet.appendChild(renderQuestionCard(index, false));
     });
 
-    if (!isGraded) {
-        const submitBtn = document.createElement('button');
-        submitBtn.textContent = "Final Submit";
-        submitBtn.style.cssText = "background:#2196F3; color:#fff; border:none; padding:16px 40px; border-radius:8px; cursor:pointer; font-size:16px; font-weight:bold; margin: 20px 0 60px 0;";
-        submitBtn.onclick = validateAnswers;
-        sheet.appendChild(submitBtn);
-    } else {
-        const retakeBtn = document.createElement('button');
-        retakeBtn.textContent = "Close Quiz and Reset";
-        retakeBtn.style.cssText = "background:#444; color:#fff; border:none; padding:16px 40px; border-radius:8px; cursor:pointer; margin-bottom:60px;";
-        retakeBtn.onclick = closeQuiz;
-        sheet.appendChild(retakeBtn);
-    }
+    const actionBtn = document.createElement('button');
+    actionBtn.style.cssText = "background:#2196F3; color:#fff; border:none; padding:16px 40px; border-radius:8px; cursor:pointer; font-size:16px; font-weight:bold; margin: 20px 0 60px 0;";
 
+    if (!isGraded) {
+        actionBtn.textContent = Messages.SUBMIT;
+        actionBtn.onclick = validateAnswers;
+    } else {
+        actionBtn.textContent = Messages.CLOSE;
+        actionBtn.style.background = "#444";
+        actionBtn.onclick = closeQuiz;
+    }
+    sheet.appendChild(actionBtn);
     container.appendChild(sheet);
 };
 
@@ -289,16 +310,18 @@ const renderQuestionCard = (index, isExam) => {
     qTitle.textContent = `Question ${index + 1}`;
     card.appendChild(qTitle);
 
-    const qText = document.createElement('p');
-    qText.style.cssText = "font-size:18px; line-height:1.6; color:#fff;";
-    qText.textContent = q.text;
-    card.appendChild(qText);
+    const qHTMLContainer = document.createElement('div');
+    qHTMLContainer.style.cssText = "font-size:18px; line-height:1.6; color:#fff;";
+    qHTMLContainer.innerHTML = q.html; // Supports images/multimedia
+    card.appendChild(qHTMLContainer);
 
     const choicesDiv = document.createElement('div');
+    choicesDiv.style.marginTop = "25px";
+
     q.choices.forEach(choice => {
         const label = document.createElement('label');
-        const isSelected = userAnswers[index] === choice;
-        
+        const isSelected = userAnswers[index] === choice.text;
+
         let bgColor = "#252526";
         let border = "1px solid #333";
         let opacity = "1";
@@ -310,7 +333,7 @@ const renderQuestionCard = (index, isExam) => {
 
         if (isGraded) {
             opacity = "0.7";
-            if (choice === q.correctAnswer) {
+            if (choice.text === q.correctAnswer) {
                 bgColor = "rgba(76, 175, 80, 0.2)";
                 border = "2px solid #4CAF50";
                 opacity = "1";
@@ -326,17 +349,20 @@ const renderQuestionCard = (index, isExam) => {
         const input = document.createElement('input');
         input.type = "radio";
         input.name = `choice_${index}`;
-        input.value = choice;
+        input.value = choice.text;
         input.checked = isSelected;
         input.disabled = isGraded;
         input.style.marginRight = "15px";
         input.onchange = () => {
-            userAnswers[index] = choice;
+            userAnswers[index] = choice.text;
             if (isExam) renderContent();
         };
 
+        const choiceHTML = document.createElement('span');
+        choiceHTML.innerHTML = choice.html; // Supports formatting/images in choices
+
         label.appendChild(input);
-        label.appendChild(document.createTextNode(choice));
+        label.appendChild(choiceHTML);
         choicesDiv.appendChild(label);
     });
     card.appendChild(choicesDiv);
@@ -344,7 +370,7 @@ const renderQuestionCard = (index, isExam) => {
     if (isExam) {
         const nav = document.createElement('div');
         nav.style.cssText = "display:flex; justify-content:space-between; margin-top:30px;";
-        
+
         const prev = document.createElement('button');
         prev.textContent = "← Previous";
         prev.disabled = index === 0;
@@ -353,9 +379,14 @@ const renderQuestionCard = (index, isExam) => {
 
         const next = document.createElement('button');
         const isLast = index === currentQuestions.length - 1;
-        next.textContent = isLast ? (isGraded ? "Results Summary" : "Review & Submit") : "Next →";
+        next.textContent = isLast ? (isGraded ? Messages.RESULTS_SUMMARY : Messages.SUBMIT) : "Next →";
         next.style.cssText = `padding:10px 20px; background:${isLast ? '#2196F3' : '#4CAF50'}; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:bold;`;
-        nextBtnAction(next, isLast);
+        next.onclick = () => {
+            if (isLast) {
+                if (isGraded) { viewMode = 'sheet'; renderOverlay(); }
+                else validateAnswers();
+            } else { currentQuestionIndex++; renderContent(); }
+        };
 
         nav.appendChild(prev);
         nav.appendChild(next);
@@ -364,22 +395,6 @@ const renderQuestionCard = (index, isExam) => {
 
     return card;
 };
-
-const nextBtnAction = (btn, isLast) => {
-    btn.onclick = () => {
-        if (isLast) {
-            if (isGraded) {
-                viewMode = 'sheet';
-                renderOverlay();
-            } else {
-                validateAnswers();
-            }
-        } else {
-            currentQuestionIndex++;
-            renderContent();
-        }
-    };
-}
 
 const validateAnswers = () => {
     const unattempted = currentQuestions.length - Object.keys(userAnswers).length;
