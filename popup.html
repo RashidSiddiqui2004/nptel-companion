@@ -1,99 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Theme Toggle</title>
+    <title>NPTEL Companion</title>
     <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --bg: #1a1a1b;
+            --surface: #2d2d2e;
+            --text: #ffffff;
+            --text-dim: #b0b0b0;
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #282c34;
-            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            width: 300px;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: var(--surface);
+            padding: 16px;
             text-align: center;
-            width: 250px;
+            border-bottom: 1px solid #3d3d3e;
         }
 
-        .extension-description {
-            font-family: Arial, sans-serif;
+        .header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .feature-title {
+            font-weight: bold;
             font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .toggle-container {
+        .feature-desc {
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        /* Toggle Switch */
+        .switch {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 25px;
+            width: 44px;
+            height: 22px;
         }
 
-        .toggle-container input {
+        .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
 
-        .toggle-slider {
+        .slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
             transition: .4s;
-            border-radius: 25px;
+            border-radius: 34px;
         }
 
-        .toggle-slider:before {
+        .slider:before {
             position: absolute;
             content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 2.5px;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
         }
 
-        input:checked+.toggle-slider {
-            background-color: #2196F3;
+        input:checked + .slider {
+            background-color: var(--secondary);
         }
 
-        input:checked+.toggle-slider:before {
-            transform: translateX(25px);
+        input:checked + .slider:before {
+            transform: translateX(22px);
         }
 
-        .status {
-            margin-top: 10px;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
+        .status-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #444;
+            color: #eee;
+        }
+
+        .footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-dim);
+            border-top: 1px solid #3d3d3e;
         }
     </style>
 </head>
-
 <body>
-    <h3>NPTEL Dark Mode</h3>
+    <div class="header">
+        <h2>NPTEL Companion</h2>
+    </div>
 
-    <p class="extension-description">
-        Enable dark mode for a comfortable viewing experience on NPTEL. Toggle it on or off as per your preference.
-    </p>
+    <div class="content">
+        <!-- Dark Mode Feature -->
+        <div class="feature-card">
+            <div class="feature-title">
+                🌙 Dark Theme
+            </div>
+            <div class="feature-desc">
+                Comfortable night-time studying with our custom eye-friendly theme.
+            </div>
+            <div class="control-row">
+                <span class="status-badge" id="statusText">Off</span>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
 
-    <label class="toggle-container">
-        <input type="checkbox" id="darkModeToggle">
-        <span class="toggle-slider"></span>
-    </label>
+        <!-- Mock Quiz Feature -->
+        <div class="feature-card">
+            <div class="feature-title">
+                📝 Mock Quiz
+            </div>
+            <div class="feature-desc">
+                Revision made easy! Convert any assessment into an interactive mock quiz.
+            </div>
+            <div class="control-row">
+                <span style="font-size: 11px; color: var(--primary);">Active on Assessments</span>
+            </div>
+        </div>
+    </div>
 
-    <div class="status" id="statusText">Off</div>
-
-    <!-- 
-    <button id="toggleDarkMode">NPTEL Dark Mode</button>
- -->
+    <div class="footer">
+        Enhance your NPTEL learning journey 🚀
+    </div>
 
     <script src="popup.js"></script>
 </body>
-
 </html>

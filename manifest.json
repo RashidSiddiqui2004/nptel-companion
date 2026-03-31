@@ -1,17 +1,14 @@
 {
     "manifest_version": 3,
-    "name": "Dark Theme Extension for NPTEL",
+    "name": "NPTEL Companion: Dark Mode & Mock Quiz",
     "version": "1.0",
-    "description": "Transform your SWAYAM NPTEL journey with our cool dark theme🌙! Enjoy a more comfortable, eye-friendly interface that makes studying late nights a breeze for all dedicated students. 📚✨",
+    "description": "Enhance your NPTEL experience with a sleek dark theme and interactive mock quizzes for effortless revision and better learning. 🌙📝",
     "permissions": [
         "storage",
         "tabs",
         "activeTab",
-        "webNavigation"
+        "scripting"
     ],
-    "background": {
-        "service_worker": "background.js"
-    },
     "content_scripts": [
         {
             "matches": [
@@ -19,7 +16,8 @@
                 "https://onlinecourses.nptel.ac.in/*/unit?unit=*&lesson=*"
             ],
             "js": [
-                "content.js"
+                "toggleTheme.js",
+                "generateQuiz.js"
             ],
             "css": [
                 "styles.css"

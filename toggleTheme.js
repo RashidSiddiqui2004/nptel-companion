@@ -1,25 +1,6 @@
 let darkModeEnabled = false;
 
-function applyDarkModeToImages() {
-    const images = document.querySelectorAll('.yui-img');
-
-    images.forEach(img => {
-        img.style.filter = 'brightness(0.6) contrast(1.5)';
-    });
-}
-
-function removeDarkModeFromImages() {
-    // Select all images on the page
-    const images = document.querySelectorAll('img');
-
-    // Loop through each image and remove the filters
-    images.forEach(img => {
-        img.style.filter = ''; // Reset filter
-    });
-}
-
 function applyDarkTheme() {
-
     document.body.style.backgroundColor = "black";
 
     const mainbody = document.getElementById("gcb-main-body");
@@ -28,7 +9,6 @@ function applyDarkTheme() {
         mainbody.style.backgroundColor = "#211d1d";
         mainbody.style.color = "white";
     }
-
 
     const assignmentDiv = document.getElementById("gcb-main-article");
 
@@ -56,53 +36,40 @@ function applyDarkTheme() {
     const videoTranscriptDiv = document.getElementById('video-transcript-container');
     if (videoTranscriptDiv) {
         videoTranscriptDiv.style.backgroundColor = '#464242';
-
         videoTranscriptDiv.style.borderColor = '#332f2f';
-
     }
 
     const qtFeedbackElements = document.querySelectorAll('.qt-feedback');
 
     qtFeedbackElements.forEach(feedbackElement => {
-
-        // Select the .feedback-header inside the current .qt-feedback element
         const feedbackHeader = feedbackElement.querySelector('.feedback-header');
 
         if (feedbackHeader) {
-            // Select all .correct and .incorrect elements inside the .feedback-header
             const correctElements = feedbackHeader.querySelectorAll('.correct');
             const incorrectElements = feedbackHeader.querySelectorAll('.incorrect');
 
-            // Handle correct elements
             if (correctElements.length > 0) {
-                // Style the first .correct element
                 const firstCorrectElement = correctElements[0];
                 firstCorrectElement.style.color = '#04f8a2'; // Set the color to green
 
-                // Create a tick mark span and append it to the first correct element
                 const tickMark = document.createElement('span');
                 tickMark.textContent = ' ✔️';
                 firstCorrectElement.appendChild(tickMark);
 
-                // Style the second .correct element if it exists
                 if (correctElements.length > 1) {
                     const secondCorrectElement = correctElements[1];
                     secondCorrectElement.style.color = '#04f8a2';
                 }
             }
 
-            // Handle incorrect elements
             if (incorrectElements.length > 0) {
-                // Style the first .incorrect element
                 const firstIncorrectElement = incorrectElements[0];
                 firstIncorrectElement.style.color = '#fd1600'; // Set the color to red
 
-                // Create a cross mark span and append it to the first incorrect element
                 const crossMark = document.createElement('span');
                 crossMark.textContent = ' ❌';
                 firstIncorrectElement.appendChild(crossMark);
 
-                // Style the second .incorrect element if it exists
                 if (incorrectElements.length > 1) {
                     const secondIncorrectElement = incorrectElements[1];
                     secondIncorrectElement.style.color = '#fd1600';
@@ -111,13 +78,10 @@ function applyDarkTheme() {
         }
     });
 
-    // Style .faculty-answer elements
     document.querySelectorAll('.faculty-answer').forEach(element => {
         element.style.color = '#0de2cc';
     });
-
-
-
+ 
     const assignmentTitleDiv = document.querySelector(".assessment-top-info");
     if (assignmentTitleDiv) {
         const assignmentMsg = assignmentTitleDiv.querySelector('strong');
@@ -137,7 +101,6 @@ function applyDarkTheme() {
         }
     }
 
-    // Check if .modal-content element exists
     const assignmentSubmittedMsgPopup = document.querySelector('.modal-body');
     if (assignmentSubmittedMsgPopup) {
         assignmentSubmittedMsgPopup.style.backgroundColor = "#812222";
@@ -146,7 +109,6 @@ function applyDarkTheme() {
         console.warn('.modal-content element not found.');
     }
 
-    // Check if .assessment-pop-up element exists
     const assignmentMsgPopup = document.querySelector('.assessment-pop-up');
     if (assignmentMsgPopup) {
         assignmentMsgPopup.style.backgroundColor = "#555";
@@ -154,7 +116,6 @@ function applyDarkTheme() {
         console.warn('.assessment-pop-up element not found.');
     }
 
-    // Check if #assessment-not-all-attempt-submit element exists
     const assignmentNotAllAttempt = document.querySelector('#assessment-not-all-attempt-submit');
     if (assignmentNotAllAttempt) {
         assignmentNotAllAttempt.style.backgroundColor = '#40da9d';
@@ -163,9 +124,7 @@ function applyDarkTheme() {
         console.warn('#assessment-not-all-attempt-submit element not found.');
     }
 
-
     // handle sidebar
-
     const sidebarButtons = document.querySelectorAll(".unit_heading");
 
     if (sidebarButtons) {
@@ -193,22 +152,37 @@ function applyDarkTheme() {
         sideBarMenu.style.backgroundColor = '#1e1d1d';
     }
 
-    const subunitsElement = document.querySelectorAll(".subunit_navbar_current");
+    const subunitsElement = document.querySelector(".subunit_navbar_current");
 
     if (subunitsElement) {
         const currentLiElements = subunitsElement.querySelectorAll(".subunit_other");
 
         currentLiElements.forEach(elem => {
-            elem.style.backgroundColor = '#c1c1c1';
+            elem.style.backgroundColor = '#2d2c2cff';
 
             const proxy = elem.querySelector('div');
             if (proxy) {
                 const textelem = proxy.querySelector('a');
                 if (textelem) {
-                    textelem.style.color = '#ffffff';
+                    textelem.style.color = '#fff';
                 }
             }
         });
+
+        const currentSubunit = subunitsElement.querySelector(".subunit_current");
+
+        if (currentSubunit) {
+            currentSubunit.style.backgroundColor = '#07467eff';
+
+            const proxy = currentSubunit.querySelector('div');
+            if (proxy) {
+                const textelem = proxy.querySelector('a');
+                if (textelem) {
+                    textelem.style.color = '#fff';
+                }
+            }
+        }
+
     }
 
     const deadlineForAssgment = document.querySelector('.gcb-submission-due-date');
@@ -218,38 +192,9 @@ function applyDarkTheme() {
     document.querySelectorAll('.qt-question').forEach(elem => {
         elem.style.color = '#ffffff';
     });
-
-
-    // // Select the input field
-    // const inputField = document.querySelectorAll('input');
-
-    // // Apply minimalistic styles
-    // if (inputField) {
-    //     inputField.style.padding = '10px';
-    //     inputField.style.border = '1px solid #ccc';
-    //     inputField.style.borderRadius = '4px';        // Rounded corners
-    //     inputField.style.backgroundColor = '#f9f9f9'; // Light background
-    //     inputField.style.fontSize = '16px';           // Comfortable font size
-    //     inputField.style.color = '#333';              // Dark text color 
-
-    //     // Add a focus style
-    //     inputField.addEventListener('focus', () => {
-    //         inputField.style.borderColor = '#007BFF';  // Blue border on focus
-    //         inputField.style.backgroundColor = '#fff'; // White background on focus
-    //     });
-
-    //     // Add a blur style to revert changes on focus out
-    //     inputField.addEventListener('blur', () => {
-    //         inputField.style.borderColor = '#ccc';   // Revert border color
-    //         inputField.style.backgroundColor = '#f9f9f9'; // Revert background color
-    //     });
-    // }
-
-
 }
 
 function applyLightTheme() {
-
     document.body.style.backgroundColor = "";
 
     const mainbody = document.getElementById("gcb-main-body");
@@ -338,12 +283,10 @@ function applyLightTheme() {
         elem.style.color = ''; // Reset text color to default
     });
 
-    // Apply background color to '.gcb-aside' elements
     document.querySelectorAll('.gcb-aside').forEach(elem => {
         elem.style.backgroundColor = '';
     });
 
-    // Handle feedback elements
     const qtFeedbackElements = document.querySelectorAll('.qt-feedback');
     qtFeedbackElements.forEach(feedbackElement => {
         const feedbackHeader = feedbackElement.querySelector('.feedback-header');
@@ -366,7 +309,6 @@ function applyLightTheme() {
         }
     });
 
-    // Style faculty answers
     document.querySelectorAll('.faculty-answer').forEach(element => {
         element.style.color = '';
     });
@@ -389,20 +331,36 @@ function applyLightTheme() {
 
     const assignmentSubmittedMsgPopup = document.querySelector('.modal-content');
     if (assignmentSubmittedMsgPopup) {
-        assignmentSubmittedMsgPopup.style.backgroundColor = ""; // Reset to default
+        assignmentSubmittedMsgPopup.style.backgroundColor = "";  
     }
 
     const assignmentMsgPopup = document.querySelector('.assessment-pop-up');
     if (assignmentMsgPopup) {
-        assignmentMsgPopup.style.backgroundColor = ""; // Reset to default
+        assignmentMsgPopup.style.backgroundColor = ""; 
     }
 
     const assignmentNotAllAttempt = document.querySelector('#assessment-not-all-attempt-submit');
     if (assignmentNotAllAttempt) {
-        assignmentNotAllAttempt.style.backgroundColor = ""; // Reset to default
-        assignmentNotAllAttempt.style.color = ""; // Reset to default
+        assignmentNotAllAttempt.style.backgroundColor = "";  
+        assignmentNotAllAttempt.style.color = "";  
     }
 
+}
+
+function applyDarkModeToImages() {
+    const images = document.querySelectorAll('.yui-img');
+
+    images.forEach(img => {
+        img.style.filter = 'brightness(0.6) contrast(1.5)';
+    });
+}
+
+function removeDarkModeFromImages() {
+    const images = document.querySelectorAll('img');
+
+    images.forEach(img => {
+        img.style.filter = '';  
+    });
 }
 
 // Function to toggle dark theme
@@ -421,7 +379,6 @@ function toggleDarkTheme() {
         });
     });
 }
-
 
 // Listen for the message from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

@@ -1,69 +1,40 @@
-# NPTEL Dark Mode Chrome Extension
+# NPTEL Companion: Dark Mode & Mock Quiz
 
 ## Problem Statement
-NPTEL (National Programme on Technology Enhanced Learning) provides online courses for a wide range of subjects. However, the default light theme of the NPTEL website may cause eye strain during prolonged study sessions, especially in low-light environments. This Chrome extension addresses this issue by adding a dark mode to the NPTEL website, making it more comfortable for users to study at night or in dimly lit conditions.
+The default NPTEL (SWAYAM) interface can be bright and straining during long study hours. Additionally, students often need a way to re-attempt assessment questions for better retention without submitting them. **NPTEL Companion** solves both problems by providing a seamless dark theme and an interactive mock quiz generator.
 
-
-```
-  Note: Currently, this feature is implemented only for course pages. It does not apply to the homepage or other pages of the NPTEL website.
-```
-## Features
-- Toggle Dark Mode: Switch between dark and light themes with a simple checkbox.
-- Automatic Application: Dark mode is applied automatically if the user has previously enabled it.
-- User-Friendly Interface: A minimalistic and sleek toggle switch for easy activation.
+## Key Features
+- **🌙 Smart Dark Mode**: Automatically transforms course pages into a sleek, eye-friendly dark theme.
+- **📝 Interactive Mock Quizzes**: Generates a revision quiz from any assessment page, allowing for unlimited practice.
+- **⚡ Zero Setup**: Works out of the box on all NPTEL course units and assessment pages.
+- **🔒 Private**: All quiz data is handled locally in your browser's session storage and cleared once you're done.
 
 ## Installation
-To install and use the NPTEL Dark Mode Chrome Extension, follow these steps:
 
-### Fork the Repository
-Visit the [https://github.com/RashidSiddiqui2004/nptel-dark-theme-extension] (NPTEL Dark theme repository) on GitHub.
-Click the "Fork" button at the top right of the page to create your own copy of the repository.
+### Load the Extension in Chrome
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/RashidSiddiqui2004/nptel-dark-theme-extension.git
+   ```
+2. Open Chrome and navigate to `chrome://extensions/`.
+3. Enable **Developer mode** (top right).
+4. Click **Load unpacked** and select the project folder.
 
-## Load the Extension in Chrome
+## Usage
 
-1. Clone the Repository:
+### 1. Enabling Dark Mode
+- Click the **NPTEL Companion** icon in your extension bar.
+- Toggle the "Dark Theme" switch. Your preference is saved automatically!
 
-Open your terminal or command prompt.
-Clone the repository using:
+### 2. Taking a Mock Quiz
+- Navigate to any NPTEL **Assessment** page.
+- Look for the green **"Take Mock Quiz"** button at the top of the assignment.
+- Click it to enter full-screen revision mode.
+- Submit to see your score and correct answers.
+- Close the quiz to return to the original page.
 
-```
-  git clone https://github.com/RashidSiddiqui2004/nptel-dark-theme-extension.git
-```
-
-Navigate into the project directory:
-
-```
-  cd nptel-dark-theme-extension
-```
-
-2. Open Chrome Extensions Page:
-
-- Open Google Chrome.
-- Go to the extensions page by entering chrome://extensions/ in the address bar.
-
-3. Enable Developer Mode:
-
-- Toggle the "Developer mode" switch at the top right of the extensions page.
-
-4. Load Unpacked Extension:
-
-- Click the "Load unpacked" button.
-- Select the directory where you cloned the repository (e.g., nptel-dark-mode).
-
-5. Verify Installation:
-
-- The extension should now appear in your list of installed extensions.
-- You should see a new toggle switch in your extension popup.
-
-
-# Usage
- 
-1. Open the NPTEL Website:
--  Navigate to NPTEL in your Chrome browser.
-  
-2. Toggle Dark Mode:
-  - Click the checkbox in the extension popup to enable or disable dark mode.
-   
-3. Automatic Application:
-
- - If dark mode was enabled previously, it will be automatically applied when you visit the NPTEL website.
+## Technical Overview
+Built with Chrome Manifest V3, utilizing:
+- **Content Scripts**: For real-time DOM manipulation and style injection.
+- **Session Storage**: For secure, temporary answer validation.
+- **Vanilla JS/CSS**: For lightweight performance and high compatibility.
